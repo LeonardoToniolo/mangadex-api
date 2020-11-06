@@ -187,7 +187,6 @@ class Scraper {
 
     const parseUpdates = (id, el) => {
       const selector = cheerio.load(el)
-
       return {
         id: parseInt(selector('div:nth-child(3) > a').attr('href').split('/')[2]),
         chapter: selector('div:nth-child(3) > a').text(),
@@ -204,7 +203,6 @@ class Scraper {
 
     const parseTopChapters = (id, el) => {
       const selector = cheerio.load(el)
-
       return {
         id: parseInt(selector('p > span > a').attr('href').split('/')[2]),
         chapter: selector('p > span > a').text(),
@@ -217,22 +215,22 @@ class Scraper {
 
     const parseTopMangaFollows = (id, el) => {
       const selector = cheerio.load(el)
-
       return {
-        id: parseInt(selector('div:first-of-type > a').attr('href').split('/')[2]),
+        id: parseInt(selector('div:first-of-type > a').attr('href') && selector('div:first-of-type > a').attr('href').split('/')[2]),
         title: selector('div:nth-child(2) > a').attr('title'),
         cover_url: selector('div:first-of-type > a > img').attr('src'),
         follows: parseInt(selector('p > span:first-of-type').text().trim().replace(/,/i, '')),
         rating: parseFloat(selector('p > span:last-of-type > span').text().trim()),
         users: parseInt(selector('p > span:last-of-type > small').text().trim().replace(/,/i, ''))
       }
+      
     }
 
     const parseTopMangaRating = (id, el) => {
       const selector = cheerio.load(el)
-
+      console.log(selector('div:first-of-type > a'));
       return {
-        id: parseInt(selector('div:first-of-type > a').attr('href').split('/')[2]),
+        id: parseInt(selector('div:first-of-type > a').attr('href') && selector('div:first-of-type > a').attr('href').split('/')[2]),
         title: selector('div:nth-child(2) > a').attr('title'),
         cover_url: selector('div:first-of-type > a > img').attr('src'),
         follows: parseInt(selector('p > span:last-of-type').text().trim().replace(/,/i, '')),
@@ -275,7 +273,7 @@ class Scraper {
           .get()
       }
     }
-
+    
     if (home.announcement) {
       if (content('#announcement > a').attr('href')) {
         home.announcement.url = `${host}${content('#announcement > a').attr('href')}`
